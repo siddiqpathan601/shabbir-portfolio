@@ -9,6 +9,7 @@ import { Github, Linkedin, Mail } from "lucide-react";
 // Sub-components
 import OrbitSkills from "./OrbitSkills";
 import FloatingParticles from "./FloatingParticles";
+import { HeroRoles } from "./HeroRoles";
 
 // CountUp helper component for statistics row
 const CountUp = ({ to, label, suffix = "" }) => {
@@ -136,24 +137,10 @@ export const HeroSect = () => {
               </span>
             </motion.div>
 
-            {/* 2. Heading */}
-            <motion.h1 
-              variants={itemVariants}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white mt-4"
-            >
-              Building Intelligent <br />
-              <span className="bg-fontBlue text-transparent bg-clip-text">
-                Web Experiences
-              </span>
-            </motion.h1>
-
-            {/* 3. Subtitle */}
-            <motion.p 
-              variants={itemVariants}
-              className="text-[#989898] text-sm md:text-base leading-relaxed mt-4 max-w-[620px]"
-            >
-              Building scalable web applications, AI-powered solutions, and modern digital experiences using MERN Stack, Machine Learning, and Cloud Technologies.
-            </motion.p>
+            {/* 2. Dynamic Rotating Heading & Subtitle */}
+            <motion.div variants={itemVariants}>
+              <HeroRoles />
+            </motion.div>
 
             {/* 4. Achievement Badges */}
             <motion.div 
