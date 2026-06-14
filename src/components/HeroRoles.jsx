@@ -75,7 +75,7 @@ export const HeroRoles = () => {
         >
           {/* Dynamic Role Title with customized gradient text */}
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] mt-4"
+            className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.15] mt-4 whitespace-nowrap"
             style={{
               backgroundImage: currentRole.gradient,
               WebkitBackgroundClip: "text",
