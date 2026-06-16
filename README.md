@@ -1,27 +1,26 @@
-# Shaik Arif - Professional Portfolio 🚀
+# Noor Basha Shabbir Mohammed - Senior Finance & Audit Consultant Portfolio 🚀
 
-Welcome to the codebase for my personal portfolio! This is a dark, modern web application designed to showcase my projects, professional internships, certifications, and technical skills as a **Full Stack Developer & Machine Learning Enthusiast**.
+Welcome to the codebase for my personal portfolio! This is a modern, premium web application designed to showcase my journey, key projects, and expertise as a **Senior Finance & Audit Consultant** with 15+ years of experience in internal audit, tax compliance, and financial governance.
 
 ## 💻 Tech Stack
 
 - **Frontend:** React.js, HTML5, CSS3, Tailwind CSS, JavaScript ES6+, Framer Motion (animations)
-- **Backend:** Node.js, Express.js, REST APIs, Flask
-- **Databases:** MongoDB, MySQL, SQL
-- **Machine Learning:** Python, Scikit-Learn, Regression, Classification, Model Preprocessing & Training
+- **Backend API:** Node.js, Express.js, Nodemailer (Vercel Serverless Function)
 - **Tools:** Git, GitHub, Vite
 
 ---
 
 ## 🛠️ Key Sections Included
 
-1. **Hero Section:** Greeting, tagline, animated titles, and direct links to GitHub & LinkedIn.
-2. **Currently Building:** Displays active development fields (Advanced MERN, Machine Learning, AI Web platforms).
-3. **About Me:** Core background overview with an interactive technology skill-icon grid.
-4. **Skills Radar:** High-fidelity interactive proficiency Radar Chart powered by ChartJS.
-5. **Work Experience:** Detailed timeline showing my internships at **Trangla Innovations** and **SmartBridge Educational Services**.
-6. **Featured Projects:** Showcases the **Rainfall Prediction System** and **Liver Disease Prediction System** with modular insights drawers.
-7. **Education & Certifications:** Outlines my B.Tech details from Kallam Haranadhareddy Institute of Technology and certifications from Apna College (MERN stack & Java DSA) with links to view certificates.
-8. **Contact Form:** Interactive feedback form connected to a Nodemailer serverless mailer.
+1. **Hero Section:** Executive tagline, credentials overview, downloadable PDF Resume, and quick-scroll actions.
+2. **About Section:** Overview of professional advisory background and client-first core philosophy.
+3. **Core Services:** Highlights specialized consulting services (Internal Audit, GST Compliance, Direct Tax, Risk Management, Financial Reporting, Corporate Advisory).
+4. **Professional Journey:** Chronological timeline tracking key leadership roles (Krishna IVF Clinic, Bharat Electronics, National Insurance Company, etc.).
+5. **Audit Experience:** Specialized section detailing bank audits and DRDA government fund verifications.
+6. **Core Skills:** Proficiency progress tracking across accounting, compliance, and auditing domains.
+7. **Education & Certifications:** Outlines degrees (M.Com, B.Com) and qualifications.
+8. **Why Work With Me:** Corporate value proposition grid highlighting integrity, precision, and risk mitigation.
+9. **Contact Form:** Interactive feedback form connected to a Nodemailer serverless mailer.
 
 ---
 
@@ -58,8 +57,7 @@ Make sure you have Node.js installed on your machine.
 
 ## 📧 Contact & Links
 
-- **Email:** shaikarif1801@gmail.com
-- **Phone:** +91 9603894297
-- **GitHub:** [https://github.com/Shaikarif11](https://github.com/Shaikarif11)
-- **LinkedIn:** [https://www.linkedin.com/in/shaik-arif-91509225a/](https://www.linkedin.com/in/shaik-arif-91509225a/)
-- **Location:** India
+- **Email:** shabbirmsb@gmail.com
+- **Phone:** +91 91826 74949
+- **GitHub:** [https://github.com/siddiqpathan601/shabbir-portfolio](https://github.com/siddiqpathan601/shabbir-portfolio)
+- **Location:** Guntur, Andhra Pradesh, India
