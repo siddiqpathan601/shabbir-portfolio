@@ -1,126 +1,224 @@
-import menu from "../assets/icons/menu.svg";
-import close from "../assets/icons/close.svg";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Menu, X, Sun, Moon, ArrowRight, Shield } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import resumePdf from "../assets/doc/Shabbir_Mohammed_Resume.pdf";
 
-export const Navbar = () => {
-  const [toggle, setToggle] = useState(false);
+export const Navbar = ({ theme, toggleTheme }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "About", href: "#about" },
+    { name: "Services", href: "#services" },
+    { name: "Journey", href: "#journey" },
+    { name: "Audits", href: "#audits" },
+    { name: "Skills", href: "#skills" },
+    { name: "Education", href: "#education" },
+    { name: "Why Me", href: "#whyme" },
+    { name: "Contact", href: "#contact" }
+  ];
+
+  const handleLinkClick = (e, href) => {
+    e.preventDefault();
+    setIsOpen(false);
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80; // height of sticky navbar
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+  };
 
   return (
     <>
-      <div className="flex w-full justify-center sticky top-0 z-50 bg-deepBlue/80 backdrop-blur-md border-b border-white/5">
-        <nav className="flex h-[12vh] w-full justify-between items-center px-5 py-6 max-w-[60rem]">
-          <div className="logo">
-            <a href="#Home">
-              <h1
-                className="text-2xl font-bold text-white tracking-wider cursor-pointer"
-                style={{ fontFamily: "'Poppins', sans-serif" }}
-              >
-                arif
-                <span className="bg-gradient-to-r from-[#22D3EE] to-[#7C3AED] bg-clip-text text-transparent">
-                  .dev
-                </span>
-              </h1>
-            </a>
-          </div>
-
-          {/* Desktop Menu */}
-          <div className="menu-items hidden md:flex items-center gap-6 text-xs text-white uppercase font-semibold">
-            <a href="#Home" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Home
-            </a>
-            <a href="#About" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              About
-            </a>
-            <a href="#Skills" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Skills
-            </a>
-            <a href="#Experience" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Experience
-            </a>
-            <a href="#Projects" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Projects
-            </a>
-            <a href="#Education" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Education
-            </a>
-            <a href="#Contact" className="menu-item cursor-pointer hover:text-color2 transition duration-200">
-              Contact
-            </a>
-          </div>
-
-          {/* Mobile Menu Icon */}
-          <div onClick={() => setToggle(!toggle)} className="menu md:hidden cursor-pointer">
-            <img className="w-8" src={menu} alt="Open Menu" />
-          </div>
-        </nav>
-      </div>
-
-      {/* Mobile Drawer */}
-      <div
-        className={`${
-          toggle ? "translate-x-0" : "translate-x-full"
-        } fixed inset-y-0 right-0 w-full sm:w-80 bg-black/95 z-50 backdrop-blur-xl flex flex-col justify-center items-center gap-y-8 transition-transform duration-300 ease-in-out`}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/80 dark:bg-navy-950/80 backdrop-blur-md border-b border-slate-200/50 dark:border-navy-800/50 py-3 shadow-md"
+            : "bg-transparent py-5"
+        }`}
       >
-        <div className="close">
-          <img
-            onClick={() => setToggle(!toggle)}
-            className="w-10 absolute right-4 top-8 cursor-pointer"
-            src={close}
-            alt="Close Menu"
-          />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+          {/* Logo Brand */}
+          <a
+            href="#home"
+            onClick={(e) => handleLinkClick(e, "#home")}
+            className="flex items-center gap-2 group"
+          >
+            <div className="w-10 h-10 bg-navy-900 dark:bg-gold-500 border border-gold-500/20 dark:border-navy-950/20 rounded flex items-center justify-center shadow-lg transition-transform group-hover:scale-105">
+              <Shield className="text-white dark:text-navy-950" size={18} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-navy-900 dark:text-white font-sora font-bold text-sm leading-none tracking-tight group-hover:text-gold-500 dark:group-hover:text-gold-400 transition-colors">
+                Shabbir Mohammed
+              </span>
+              <span className="text-slate-500 dark:text-slate-400 text-[10px] tracking-wide font-medium mt-0.5 uppercase">
+                Senior Finance Consultant
+              </span>
+            </div>
+          </a>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center gap-7">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className="text-xs uppercase font-semibold tracking-wider text-slate-600 hover:text-navy-900 dark:text-slate-300 dark:hover:text-gold-400 transition-colors duration-200"
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right Side Actions */}
+          <div className="hidden lg:flex items-center gap-4">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded bg-slate-100 hover:bg-slate-200 dark:bg-navy-800 dark:hover:bg-navy-700 text-slate-700 dark:text-slate-300 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            {/* Resume Download Button */}
+            <a
+              href={resumePdf}
+              download="Shabbir_Mohammed_Resume.pdf"
+              className="inline-flex items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-navy-900/40 text-navy-900 dark:text-white px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-slate-300 dark:border-navy-700/60"
+            >
+              Resume
+            </a>
+
+            {/* CTA Button */}
+            <a
+              href="#contact"
+              onClick={(e) => handleLinkClick(e, "#contact")}
+              className="inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 group gap-1 border border-transparent dark:border-gold-400/20"
+            >
+              Schedule Consultation
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
+
+          {/* Mobile Navigation Trigger */}
+          <div className="flex items-center gap-3 lg:hidden">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded bg-slate-100 hover:bg-slate-200 dark:bg-navy-800 dark:hover:bg-navy-700 text-slate-700 dark:text-slate-300 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            {/* Menu Toggle */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-2 rounded bg-slate-100 hover:bg-slate-200 dark:bg-navy-800 dark:hover:bg-navy-700 text-slate-700 dark:text-slate-300 transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
-        <div className="text text-white uppercase text-3xl font-light flex flex-col gap-6 items-center">
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Home"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Home
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#About"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            About
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Skills"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Skills
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Experience"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Experience
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Projects"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Projects
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Education"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Education & Certs
-          </a>
-          <a
-            onClick={() => setToggle(!toggle)}
-            href="#Contact"
-            className="menu-item cursor-pointer hover:text-color2 transition duration-200"
-          >
-            Contact
-          </a>
-        </div>
-      </div>
+      </header>
+
+      {/* Mobile Drawer Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black z-40 lg:hidden"
+            />
+
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-80 bg-white dark:bg-navy-900 border-l border-slate-200 dark:border-navy-800 z-50 p-6 flex flex-col justify-between shadow-2xl lg:hidden"
+            >
+              <div className="flex flex-col gap-6">
+                <div className="flex justify-between items-center pb-6 border-b border-slate-100 dark:border-navy-800">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-navy-900 dark:bg-gold-500 rounded flex items-center justify-center">
+                      <Shield className="text-white dark:text-navy-950" size={14} />
+                    </div>
+                    <span className="text-navy-900 dark:text-white font-sora font-bold text-sm">
+                      Consultant
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 rounded hover:bg-slate-100 dark:hover:bg-navy-800 text-slate-500 dark:text-slate-400"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <nav className="flex flex-col gap-4">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(e) => handleLinkClick(e, link.href)}
+                      className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-gold-500 dark:hover:text-gold-400 py-2 transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+
+              <div className="mt-8 border-t border-slate-100 dark:border-navy-800 pt-6 flex flex-col gap-3">
+                <a
+                  href={resumePdf}
+                  download="Shabbir_Mohammed_Resume.pdf"
+                  className="w-full inline-flex items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-navy-800/40 text-navy-900 dark:text-white px-5 py-3 rounded font-bold uppercase tracking-wider text-xs border border-slate-300 dark:border-navy-700/60"
+                >
+                  Download Resume
+                </a>
+                <a
+                  href="#contact"
+                  onClick={(e) => handleLinkClick(e, "#contact")}
+                  className="w-full inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-3 rounded font-bold uppercase tracking-wider text-xs transition-colors group gap-2"
+                >
+                  Schedule Consultation
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 };
