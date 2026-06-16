@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon, ArrowRight, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import resumePdf from "../assets/doc/Shabbir_Mohammed_Resume.pdf";
 
 export const Navbar = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,15 +101,6 @@ export const Navbar = ({ theme, toggleTheme }) => {
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            {/* Resume Download Button */}
-            <a
-              href={resumePdf}
-              download="Shabbir_Mohammed_Resume.pdf"
-              className="inline-flex items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-navy-900/40 text-navy-900 dark:text-white px-4 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 border border-slate-300 dark:border-navy-700/60"
-            >
-              Resume
-            </a>
-
             {/* CTA Button */}
             <a
               href="#contact"
@@ -198,14 +188,7 @@ export const Navbar = ({ theme, toggleTheme }) => {
                 </nav>
               </div>
 
-              <div className="mt-8 border-t border-slate-100 dark:border-navy-800 pt-6 flex flex-col gap-3">
-                <a
-                  href={resumePdf}
-                  download="Shabbir_Mohammed_Resume.pdf"
-                  className="w-full inline-flex items-center justify-center bg-transparent hover:bg-slate-100 dark:hover:bg-navy-800/40 text-navy-900 dark:text-white px-5 py-3 rounded font-bold uppercase tracking-wider text-xs border border-slate-300 dark:border-navy-700/60"
-                >
-                  Download Resume
-                </a>
+              <div className="mt-8 border-t border-slate-100 dark:border-navy-800 pt-6">
                 <a
                   href="#contact"
                   onClick={(e) => handleLinkClick(e, "#contact")}

@@ -1,4 +1,5 @@
 import { Linkedin, Mail, Phone, ArrowUp, Shield } from "lucide-react";
+import resumePdf from "../assets/doc/Shabbir_Mohammed_Resume.pdf";
 
 export const FooterSection = () => {
   const handleScrollTop = () => {
@@ -58,6 +59,15 @@ export const FooterSection = () => {
               </a>
             ))}
           </nav>
+          <div className="mt-1 pt-3 border-t border-navy-800">
+            <a
+              href={resumePdf}
+              download="Shabbir_Mohammed_Resume.pdf"
+              className="text-xs text-gold-500 hover:text-gold-400 font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-1"
+            >
+              Download Resume
+            </a>
+          </div>
         </div>
 
         {/* Right Contact Details Column */}
