@@ -1,10 +1,11 @@
 {
-  "name": "shaik-arif-portfolio",
+  "name": "shabbir-portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
+    "dev:backend": "nodemon server.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -20,13 +21,14 @@
     "googleapis": "^144.0.0",
     "lucide-react": "^0.552.0",
     "motion": "^11.16.0",
-    "nodemailer": "^6.9.16",
     "nodemon": "^3.1.9",
     "os": "^0.1.2",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
-    "react-intersection-observer": "^9.14.1"
+    "react-intersection-observer": "^9.14.1",
+    "react-router-dom": "^7.18.0",
+    "resend": "^6.12.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

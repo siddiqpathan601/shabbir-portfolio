@@ -14,6 +14,7 @@ export const Contact = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
     const newErrors = {};
@@ -40,7 +41,7 @@ export const Contact = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -49,19 +50,45 @@ export const Contact = () => {
     }
 
     setIsSubmitting(true);
-    // Simulate API submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({
-        name: "",
-        company: "",
-        email: "",
-        phone: "",
-        message: ""
+    setSubmitSuccess(false);
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/consultation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.company 
+            ? `Company: ${formData.company}\n\n${formData.message}`
+            : formData.message
+        })
       });
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    }, 1500);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setFormData({
+          name: "",
+          company: "",
+          email: "",
+          phone: "",
+          message: ""
+        });
+        setTimeout(() => setSubmitSuccess(false), 5000);
+      } else {
+        setSubmitError(data.error || "Failed to send your message. Please try again.");
+      }
+    } catch (err) {
+      setSubmitError("Could not connect to the mail server. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -170,6 +197,13 @@ export const Contact = () => {
                 <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm rounded">
                   <CheckCircle2 size={18} className="shrink-0" />
                   <span>Your request was sent successfully. I will get back to you shortly.</span>
+                </div>
+              )}
+
+              {submitError && (
+                <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-400 text-xs sm:text-sm rounded">
+                  <AlertCircle size={18} className="shrink-0" />
+                  <span>{submitError}</span>
                 </div>
               )}
 

@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Sun, Moon, ArrowRight, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const Navbar = ({ theme, toggleTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,18 +35,23 @@ export const Navbar = ({ theme, toggleTheme }) => {
   const handleLinkClick = (e, href) => {
     e.preventDefault();
     setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      const offset = 80; // height of sticky navbar
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+    
+    if (location.pathname !== "/") {
+      navigate(`/${href}`);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        const offset = 80; // height of sticky navbar
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }
     }
   };
 
@@ -59,7 +67,7 @@ export const Navbar = ({ theme, toggleTheme }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           {/* Logo Brand */}
           <a
-            href="#home"
+            href="/"
             onClick={(e) => handleLinkClick(e, "#home")}
             className="flex items-center gap-2 group"
           >
@@ -102,14 +110,16 @@ export const Navbar = ({ theme, toggleTheme }) => {
             </button>
 
             {/* CTA Button */}
-            <a
-              href="#contact"
-              onClick={(e) => handleLinkClick(e, "#contact")}
-              className="inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 group gap-1 border border-transparent dark:border-gold-400/20"
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                navigate("/schedule-consultation");
+              }}
+              className="inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 group gap-1 border border-transparent dark:border-gold-400/20 cursor-pointer animate-pulse"
             >
               Schedule Consultation
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </a>
+            </button>
           </div>
 
           {/* Mobile Navigation Trigger */}
@@ -189,14 +199,16 @@ export const Navbar = ({ theme, toggleTheme }) => {
               </div>
 
               <div className="mt-8 border-t border-slate-100 dark:border-navy-800 pt-6">
-                <a
-                  href="#contact"
-                  onClick={(e) => handleLinkClick(e, "#contact")}
-                  className="w-full inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-3 rounded font-bold uppercase tracking-wider text-xs transition-colors group gap-2"
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/schedule-consultation");
+                  }}
+                  className="w-full inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-5 py-3 rounded font-bold uppercase tracking-wider text-xs transition-colors group gap-2 cursor-pointer"
                 >
                   Schedule Consultation
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                </a>
+                </button>
               </div>
             </motion.div>
           </>

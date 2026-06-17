@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
@@ -11,6 +12,7 @@ import { WhyWorkWithMe } from "./components/WhyWorkWithMe";
 import { Testimonials } from "./components/Testimonials";
 import { Contact } from "./components/Contact";
 import { FooterSection } from "./components/FooterSection";
+import { ScheduleConsultation } from "./components/ScheduleConsultation";
 import { Analytics } from "@vercel/analytics/react";
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
     const saved = localStorage.getItem("theme");
     return saved || "dark";
   });
+
+  const location = useLocation();
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -34,6 +38,27 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Handle scrolling to sections if the user landed on home page with a hash tag (e.g. from /schedule-consultation)
+  useEffect(() => {
+    if (location.pathname === "/" && location.hash) {
+      setTimeout(() => {
+        const element = document.querySelector(location.hash);
+        if (element) {
+          const offset = 80;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }, 100);
+    }
+  }, [location]);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
@@ -44,16 +69,33 @@ function App() {
       <div className="absolute inset-0 grid-pattern pointer-events-none z-0" />
       
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <Hero theme={theme} />
-      <About />
-      <Services />
-      <Journey />
-      <AuditExperience />
-      <Skills />
-      <Education />
-      <WhyWorkWithMe />
-      <Testimonials />
-      <Contact />
+      
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <>
+              <Hero theme={theme} />
+              <About />
+              <Services />
+              <Journey />
+              <AuditExperience />
+              <Skills />
+              <Education />
+              <WhyWorkWithMe />
+              <Testimonials />
+              <Contact />
+            </>
+          } 
+        />
+        <Route 
+          path="/schedule-consultation" 
+          element={
+            <ScheduleConsultation theme={theme} />
+          } 
+        />
+      </Routes>
+
       <FooterSection />
       <Analytics />
     </div>

@@ -5,7 +5,7 @@ Welcome to the codebase for my personal portfolio! This is a modern, premium web
 ## 💻 Tech Stack
 
 - **Frontend:** React.js, HTML5, CSS3, Tailwind CSS, JavaScript ES6+, Framer Motion (animations)
-- **Backend API:** Node.js, Express.js, Nodemailer (Vercel Serverless Function)
+- **Backend API:** Node.js, Resend SDK (Vercel Serverless Function)
 - **Tools:** Git, GitHub, Vite
 
 ---
@@ -20,7 +20,7 @@ Welcome to the codebase for my personal portfolio! This is a modern, premium web
 6. **Core Skills:** Proficiency progress tracking across accounting, compliance, and auditing domains.
 7. **Education & Certifications:** Outlines degrees (M.Com, B.Com) and qualifications.
 8. **Why Work With Me:** Corporate value proposition grid highlighting integrity, precision, and risk mitigation.
-9. **Contact Form:** Interactive feedback form connected to a Nodemailer serverless mailer.
+9. **Contact Form:** Interactive feedback form connected to a Resend serverless mailer.
 
 ---
 
@@ -28,6 +28,13 @@ Welcome to the codebase for my personal portfolio! This is a modern, premium web
 
 ### Prerequisites
 Make sure you have Node.js installed on your machine.
+
+### Environment Configuration
+Create a `.env` (or `.env.local` for local testing) file in the root directory and add your Resend API credentials:
+```env
+RESEND_API_KEY=YOUR_RESEND_API_KEY
+CONTACT_EMAIL=shabbirmsb@gmail.com
+```
 
 ### Local Development Setup
 

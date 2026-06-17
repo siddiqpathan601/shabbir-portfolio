@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronRight, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import shabbirImage from "../assets/images/shabbir.jpg";
 import resumePdf from "../assets/doc/Shabbir_Mohammed_Resume.pdf";
 
 export const Hero = ({ theme }) => {
+  const navigate = useNavigate();
   const stats = [
     { value: "15+", label: "Years Experience", description: "Audit & Accounts Leadership" },
     { value: "100+", label: "Audit Assignments", description: "Internal, Bank & Govt Audits" },
@@ -114,19 +116,18 @@ export const Hero = ({ theme }) => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 flex-wrap"
           >
-            <motion.a
-              href="#contact"
-              onClick={(e) => handleScrollTo(e, "#contact")}
+            <motion.button
+              onClick={() => navigate("/schedule-consultation")}
               whileHover={{ 
                 scale: 1.02, 
                 boxShadow: "0 0 20px rgba(197, 168, 128, 0.45)"
               }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 group gap-2 shadow-xl shadow-navy-900/10 dark:shadow-gold-500/10 border border-transparent dark:border-gold-400/20"
+              className="inline-flex items-center justify-center bg-navy-900 hover:bg-navy-800 dark:bg-gold-500 dark:hover:bg-gold-600 text-white dark:text-navy-950 px-6 py-3.5 rounded text-xs font-bold uppercase tracking-wider transition-all duration-200 group gap-2 shadow-xl shadow-navy-900/10 dark:shadow-gold-500/10 border border-transparent dark:border-gold-400/20 cursor-pointer"
             >
               Secure Your Risk Assessment
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </motion.a>
+            </motion.button>
             
             <motion.a
               href={resumePdf}
