@@ -1,5 +1,5 @@
 /* global process */
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 // Simple in-memory rate limiting (works in hot/warm serverless containers)
 const rateLimitCache = new Map();
@@ -92,25 +92,25 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Message rejected by spam filters." });
   }
 
-  // 6. Check production environment secrets
-  const apiKey = process.env.RESEND_API_KEY;
+  // 6. Check production environment secrets for Gmail / Nodemailer
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
   const toEmail = process.env.CONTACT_EMAIL;
-  
-  // Default to onboarding@resend.dev in dev if not set
-  const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev"; 
 
-  if (!apiKey) {
-    console.error("[Configuration Error] RESEND_API_KEY is not defined in environment variables.");
-    return res.status(500).json({ error: "Email service is temporarily unconfigured." });
+  if (!gmailUser) {
+    console.error("[Configuration Error] GMAIL_USER is not defined in environment variables.");
+    return res.status(500).json({ error: "Failed to submit consultation request." });
+  }
+  if (!gmailAppPassword) {
+    console.error("[Configuration Error] GMAIL_APP_PASSWORD is not defined in environment variables.");
+    return res.status(500).json({ error: "Failed to submit consultation request." });
   }
   if (!toEmail) {
     console.error("[Configuration Error] CONTACT_EMAIL is not defined in environment variables.");
-    return res.status(500).json({ error: "Email recipient is temporarily unconfigured." });
+    return res.status(500).json({ error: "Failed to submit consultation request." });
   }
 
   try {
-    const resend = new Resend(apiKey);
-
     // Detect if this request is a structured consultation booking
     const isConsultation = message.includes("=== NEW CONSULTATION REQUEST ===");
     
@@ -156,7 +156,7 @@ export default async function handler(req, res) {
         }
       });
 
-      // Mobile-friendly, responsive HTML layout
+      // Mobile-friendly, responsive HTML layout matching the portfolio design
       emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -283,97 +283,35 @@ export default async function handler(req, res) {
       `;
     }
 
-    console.log("Recipient Email:", toEmail);
-    console.log("Contact Email:", process.env.CONTACT_EMAIL);
-    console.log("From Email Domain:", fromEmail);
+    console.log("Recipient Email (CONTACT_EMAIL):", toEmail);
+    console.log("SMTP Sender (GMAIL_USER):", gmailUser);
 
-    // Send primary notification email to Shabbir
-    const { data, error } = await resend.emails.send({
-      from: fromEmail,
-      to: [toEmail],
+    // Create Nodemailer Transporter using Gmail SMTP
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // true for port 465, false for other ports
+      auth: {
+        user: gmailUser,
+        pass: gmailAppPassword
+      }
+    });
+
+    const mailOptions = {
+      from: `"${safeName}" <${gmailUser}>`,
+      to: toEmail,
       subject: isConsultation ? `Consultation Booking: ${safeName}` : `Contact Message: ${safeName}`,
       html: emailHtml,
       replyTo: safeEmail
-    });
+    };
 
-    if (error) {
-      console.error("Resend API error:", error);
-      return res.status(400).json({ error: error.message || "Email sending failed." });
-    }
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully. Message ID:", info.messageId);
 
-    // Send automated client-facing confirmation auto-reply
-    try {
-      const clientSubject = "Consultation Request Received - Noor Basha Shabbir Mohammed";
-      const clientHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Request Confirmation</title>
-        <style>
-          body { font-family: 'Inter', Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 10px; }
-          .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-          .header { background: #070b19; color: #ffffff; padding: 24px 15px; text-align: center; border-bottom: 3px solid #c5a880; }
-          .header h1 { font-family: 'Sora', Arial, sans-serif; font-size: 20px; margin: 0; }
-          .content { padding: 20px 15px; font-size: 14px; line-height: 1.6; color: #334155; }
-          .footer { background: #f8fafc; text-align: center; padding: 15px; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; }
-          ol { padding-left: 20px; margin: 15px 0; }
-          li { margin-bottom: 10px; }
-          @media only screen and (min-width: 480px) {
-            body { padding: 20px; }
-            .content { padding: 30px; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Noor Basha Shabbir Mohammed</h1>
-            <p style="margin: 5px 0 0 0; color: #c5a880; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Senior Finance & Audit Consultant</p>
-          </div>
-          <div class="content">
-            <p>Dear ${safeName},</p>
-            <p>Thank you for reaching out. I have successfully received your inquiry / consultation booking request.</p>
-            <p><strong>What happens next:</strong></p>
-            <ol>
-              <li>I will review your requirements, company profile, and scheduling preferences.</li>
-              <li>I will follow up via email or phone within 24-48 business hours to confirm the consultation date and coordinate coordinates/meeting links.</li>
-            </ol>
-            <p>If you have any supporting documents, reconciliations, or spreadsheets to share ahead of time, please reply directly to this email.</p>
-            <br>
-            <p>Best Regards,</p>
-            <p><strong>Noor Basha Shabbir Mohammed</strong><br>Senior Finance & Audit Consultant<br>shabbirmsb@gmail.com</p>
-          </div>
-          <div class="footer">
-            This is an automated confirmation. Please do not reply directly unless sharing documents.
-          </div>
-        </div>
-      </body>
-      </html>
-      `;
-
-      // Trigger the auto-reply confirmation email
-      await resend.emails.send({
-        from: fromEmail,
-        to: [safeEmail],
-        subject: clientSubject,
-        html: clientHtml
-      });
-      console.log(`Auto-confirmation email dispatched to client: ${safeEmail}`);
-    } catch (autoReplyError) {
-      // Graceful fallback for Resend Sandbox/Testing mode restrictions
-      // In sandbox mode, sending to client safeEmail will throw error because client is unverified.
-      // We log this as a warning so developers are aware, but return 200 SUCCESS on the main email.
-      console.warn(
-        `[Sandbox Mode Warning] Auto-confirmation email not sent to client (${safeEmail}). Resend testing tier only permits delivery to your own verified inbox. This confirmation email will function seamlessly in production once domain verification is complete. Error:`,
-        autoReplyError.message || autoReplyError
-      );
-    }
-
-    return res.status(200).json({ message: "Inquiry sent successfully!", data });
+    return res.status(200).json({ message: "Consultation request submitted successfully." });
   } catch (error) {
-    console.error("Internal Resend Error:", error);
-    return res.status(500).json({ error: "Failed to process the request." });
+    console.error("Nodemailer SMTP Error:", error.message || error);
+    return res.status(500).json({ error: "Failed to submit consultation request." });
   }
 }

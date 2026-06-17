@@ -82,10 +82,10 @@ export const Contact = () => {
         });
         setTimeout(() => setSubmitSuccess(false), 5000);
       } else {
-        setSubmitError(data.error || "Failed to send your message. Please try again.");
+        setSubmitError("Failed to submit consultation request.");
       }
     } catch (err) {
-      setSubmitError("Could not connect to the mail server. Please try again later.");
+      setSubmitError("Failed to submit consultation request.");
     } finally {
       setIsSubmitting(false);
     }
@@ -196,7 +196,7 @@ export const Contact = () => {
               {submitSuccess && (
                 <div className="flex items-center gap-3 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-xs sm:text-sm rounded">
                   <CheckCircle2 size={18} className="shrink-0" />
-                  <span>Your request was sent successfully. I will get back to you shortly.</span>
+                  <span>Consultation request submitted successfully.</span>
                 </div>
               )}
 

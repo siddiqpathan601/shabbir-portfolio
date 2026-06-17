@@ -201,11 +201,11 @@ ${formData.additionalNotes || "None provided"}
           additionalNotes: ""
         });
       } else {
-        setSubmitError(data.error || "Failed to submit booking request.");
+        setSubmitError("Failed to submit consultation request.");
         setSubmitStatus("error");
       }
     } catch (err) {
-      setSubmitError("Could not connect to the mail server. Please try again later.");
+      setSubmitError("Failed to submit consultation request.");
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -397,8 +397,7 @@ ${formData.additionalNotes || "None provided"}
                   >
                     <CheckCircle2 size={18} className="shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold block mb-1">Booking Request Received!</span>
-                      <span>Your consultation request was submitted successfully. Noor Basha Shabbir Mohammed will contact you shortly to confirm the scheduled slot.</span>
+                      <span className="font-bold block">Consultation request submitted successfully.</span>
                     </div>
                   </motion.div>
                 )}
@@ -412,8 +411,7 @@ ${formData.additionalNotes || "None provided"}
                   >
                     <AlertCircle size={18} className="shrink-0 mt-0.5" />
                     <div>
-                      <span className="font-bold block mb-1">Submission Failed</span>
-                      <span>{submitError || "There was a problem sending your request. Please check your network and try again."}</span>
+                      <span className="font-bold block">{submitError || "Failed to submit consultation request."}</span>
                     </div>
                   </motion.div>
                 )}
